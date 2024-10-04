@@ -1,0 +1,78 @@
+version: '3.8'
+services:
+  # Frontend (React)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args: 
+        REACT_APP_ENV: ${NODE_ENV}  # Pasa el entorno al Dockerfile
+    ports:
+      - "3000:3000"  # En desarrollo, React usa el puerto 3000
+      - "80:80"  # En producción, el puerto de Nginx es 80
+    depends_on:
+      - backend
+    networks:
+      - app-network
+    volumes:
+      - ./frontend:/app  # Solo en desarrollo para hot-reloading
+    command: >
+      sh -c "if [ ${NODE_ENV} = 'development' ]; then npm start; else nginx -g 'daemon off;'; fi"
+
+  # Backend (Node.js)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"  # Puerto del backend
+    environment:
+      - NODE_ENV=${NODE_ENV}  # Variable de entorno en función de si es DEV o PRO
+      - MONGO_URI=${MONGO_URI}  # URI de la base de datos
+      - REDIS_HOST=${REDIS_HOST}
+    depends_on:
+      - db
+    networks:
+      - app-network
+    volumes:
+      - ./backend:/app
+
+  # Base de datos (MongoDB)
+  db:
+    image: mongo:latest
+    ports:
+      - "27017:27017"  # Puerto MongoDB
+    environment:
+      # Variables obtenidas desde el respectivo fichero .env en función de si el entorno es DEV o PRO
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+      - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE}
+    networks:
+      - app-network
+    volumes:
+      - mongo-data:/data/db  # Persistencia de datos para MongoDB
+
+  # Caché (Redis) - Solo en producción
+  cache:
+    image: redis:alpine
+    ports:
+      - "6379:6379"  # Puerto Redis
+    depends_on:
+      - backend
+    networks:
+      - app-network
+    volumes:
+      - cache-data:/data  # Persistencia de datos para Redis
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    deploy:
+      placement:
+        constraints:
+          - node.labels.env == production  # Solo en producción
+
+volumes:
+  mongo-data:  # Volumen para MongoDB
+  cache-data:  # Volumen para Redis
+
+networks:
+  app-network:  # Red interna para que los servicios se comuniquen
