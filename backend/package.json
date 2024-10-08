@@ -3,18 +3,15 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "startback": "nodemon backend/server.js",
-    "startfront": "frontend/src/App.js"
+    "start": "nodemon server.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
-    "dotenv": "^16.4.5",
     "express": "^4.21.0",
     "mongoose": "^8.7.0",
+    "nodemon": "^3.1.7",
+    "react": "^18.3.1",
     "redis": "^4.7.0",
     "validator": "^13.12.0"
-  },
-  "devDependencies": {
-    "nodemon": "^3.1.7"
   }
 }
