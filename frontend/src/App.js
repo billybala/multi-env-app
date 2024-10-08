@@ -1,20 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import ConnectionSection from "./components/ConnectionSection/ConnectionSection";
+import './App.css';
+import ButtonsSection from "./components/SectionButtons/ButtonsSection";
+import { ContextProvider } from "./Context/ContextProvider";
+import MoviesList from "./components/MoviesList/MoviesList";
 
 function App() {
-  const [status, setStatus] = useState({ mongoStatus: '', redisStatus: '' });
-
-  useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_URL}/status`)
-      .then(response => response.json())
-      .then(data => setStatus(data))
-      .catch(error => console.error('Error al obtener el estado:', error));
-  }, []);
-
   return (
-    <div>
-      <h1>Estado de las conexiones</h1>
-      <p><strong>MongoDB:</strong> {status.mongoStatus}</p>
-      <p><strong>Redis:</strong> {status.redisStatus}</p>
+    <div className="App">
+      <ContextProvider>
+        <ConnectionSection />
+        <ButtonsSection />
+        <MoviesList />
+      </ContextProvider>
     </div>
   );
 }

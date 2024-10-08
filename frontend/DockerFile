@@ -1,5 +1,5 @@
 # Usa la imagen base de Node.js para construir la aplicación
-FROM node:18-alpine AS builder
+FROM node:18-alpine
 
 # Establece el directorio de trabajo
 WORKDIR /app
@@ -13,23 +13,8 @@ RUN npm install
 # Copia el código fuente
 COPY . .
 
-# Argumento para identificar el entorno (se pasará desde docker-compose)
-ARG REACT_APP_ENV
-
-# Establece la variable de entorno
-ENV REACT_APP_ENV=${REACT_APP_ENV}
-
-# Compila el proyecto en función del entorno (dev o prod)
-RUN npm run build
-
-# Etapa de producción para servir el build optimizado
-FROM nginx:alpine
-
-# Copia el build optimizado de React desde la etapa anterior
-COPY --from=builder /app/build /usr/share/nginx/html
-
 # Exponer el puerto en el que nginx sirve la aplicación
-EXPOSE 80
+EXPOSE 3000
 
 # Comando para iniciar nginx
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["npm", "start"]
