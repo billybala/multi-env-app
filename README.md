@@ -69,34 +69,34 @@ Este archivo contiene la configuración de la aplicación para ejecutarse en dif
 
 ### 4.1 Entorno de desarrollo:
 
-- Test de conexión a la base de datos: La aplicación se conecta a la base de datos automáticamente y muestra el estado de la conexión en la sección de conexión a la base de datos. Con los botones de conectar y desconectar, se visualiza como cambia el estado de la conexión a la base de datos.
+- **Test de conexión a la base de datos**: La aplicación se conecta a la base de datos automáticamente y muestra el estado de la conexión en la sección de conexión a la base de datos. Con los botones de conectar y desconectar, se visualiza como cambia el estado de la conexión a la base de datos.
 
-- Test de conexión a la caché: La aplicación no se conecta a la caché en este entorno, por lo que siempre se muestra el estado de la conexión como desconectado.
+- **Test de conexión a la caché**: La aplicación no se conecta a la caché en este entorno, por lo que siempre se muestra el estado de la conexión como desconectado.
 
-- Test de añadir una película a la base de datos: Se muestra el modal de añadir una película después de pulsar el botón "Añadir película". Se muestra la película en la lista de películas de la base de datos después de añadirla.
+- **Test de añadir una película a la base de datos**: Se muestra el modal de añadir una película después de pulsar el botón "Añadir película". Se muestra la película en la lista de películas de la base de datos después de añadirla.
 
-- Test de mostrar todas las películas de la base de datos: Se muestra la lista de películas de la base de datos después de pulsar el botón "Mostrar películas".
+- **Test de mostrar todas las películas de la base de datos**: Se muestra la lista de películas de la base de datos después de pulsar el botón "Mostrar películas".
 
-- Test de eliminar una película de la base de datos: Al pulsar el botón "Borrar película" de una película en concreto, esta se elimina de la base de datos.
+- **Test de eliminar una película de la base de datos**: Al pulsar el botón "Borrar película" de una película en concreto, esta se elimina de la base de datos.
 
-- Test de guardar películas en caché: La aplicación no se conecta a la caché en este entorno, por lo que no se puede guardar las películas en caché.
+- **Test de guardar películas en caché**: La aplicación no se conecta a la caché en este entorno, por lo que no se puede guardar las películas en caché.
 
-- Test de mostrar películas en caché: La aplicación no se conecta a la caché en este entorno, por lo que no se puede mostrar las películas en caché.
+- **Test de mostrar películas en caché**: La aplicación no se conecta a la caché en este entorno, por lo que no se puede mostrar las películas en caché.
 
-- Test de vaciar caché: La aplicación no se conecta a la caché en este entorno, por lo que no se puede vaciar la caché.
+- **Test de vaciar caché**: La aplicación no se conecta a la caché en este entorno, por lo que no se puede vaciar la caché.
 
 ### 4.2 Entorno de producción:
 
-- Test de conexión a la base de datos: La aplicación se conecta a la base de datos automáticamente y muestra el estado de la conexión en la sección de conexión a la base de datos. Con los botones de conectar y desconectar, se visualiza como cambia el estado de la conexión a la base de datos.
+- **Test de conexión a la base de datos**: La aplicación se conecta a la base de datos automáticamente y muestra el estado de la conexión en la sección de conexión a la base de datos. Con los botones de conectar y desconectar, se visualiza como cambia el estado de la conexión a la base de datos.
 
-- Test de conexión a la caché: La aplicación se conecta a la caché automáticamente y muestra el estado de la conexión en la sección de conexión a la caché. Con los botones de conectar y desconectar, se visualiza como cambia el estado de la conexión a la caché.
+- **Test de conexión a la caché**: La aplicación se conecta a la caché automáticamente y muestra el estado de la conexión en la sección de conexión a la caché. Con los botones de conectar y desconectar, se visualiza como cambia el estado de la conexión a la caché.
 
-- Test de añadir una película a la base de datos: Se muestra el modal de añadir una película después de pulsar el botón "Añadir película". Se muestra la película en la lista de películas de la base de datos después de añadirla.
+- **Test de añadir una película a la base de datos**: Se muestra el modal de añadir una película después de pulsar el botón "Añadir película". Se muestra la película en la lista de películas de la base de datos después de añadirla.
 
-- Test de mostrar todas las películas de la base de datos: Se muestra la lista de películas de la base de datos después de pulsar el botón "Mostrar películas de la BD".
+- **Test de mostrar todas las películas de la base de datos**: Se muestra la lista de películas de la base de datos después de pulsar el botón "Mostrar películas de la BD".
 
-- Test de guardar películas en caché: Al pulsar el botón "Guardar películas en caché", se guardan las películas de la base de datos en caché.
+- **Test de guardar películas en caché**: Al pulsar el botón "Guardar películas en caché", se guardan las películas de la base de datos en caché.
 
-- Test de mostrar películas en caché: Al pulsar el botón "Mostrar películas en caché", se muestran las películas guardadas en caché.
+- **Test de mostrar películas en caché**: Al pulsar el botón "Mostrar películas en caché", se muestran las películas guardadas en caché.
 
-- Test de vaciar caché: Al pulsar el botón "Vaciar caché", se vacían las películas guardadas en caché.
+- **Test de vaciar caché**: Al pulsar el botón "Vaciar caché", se vacían las películas guardadas en caché.
