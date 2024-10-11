@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { 
     Container,
     Box,
@@ -10,19 +10,14 @@ import ListCache from "./components/ListCache/ListCache";
 const MoviesList = () => {
     const { moviesDB, moviesCache, listToShow } = useContext(MoviesContext);
 
-    useState(() => {
-        console.log(moviesDB.length);
-        
-    }, [moviesDB])
-
     return (
         <Container maxWidth="lg">
             <Box sx={{ display: 'flex', flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', color: 'white', p: "3%", gap: '15px'}}>
                 {listToShow && (
                     listToShow === "db" ? 
-                        (moviesDB.length !== 0 ? <ListDB /> : <div>No movies set</div>) 
+                        (moviesDB.length !== 0 ? <ListDB /> : <div>No hay películas que mostrar</div>) 
                         : (moviesCache ? <ListCache /> 
-                            : <div>No movies set</div>))}
+                            : <div>No hay películas que mostrar</div>))}
             </Box>
         </Container>
     );

@@ -14,6 +14,7 @@ export const ContextProvider = ({ children }) => {
   const [cacheConnectionState, setCacheConnectionState] = useState('Disconnected');
   const [environment, setEnvironment] = useState('');
 
+  // Retornar estados globales compartidos entre todos los componentes
   return (
     <MoviesContext.Provider value={
         {

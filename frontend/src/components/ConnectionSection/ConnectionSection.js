@@ -11,6 +11,7 @@ import { Global } from '../../helpers/Global';
 const ConnectionSection = () => {
   const { setEnvironment } = useContext(MoviesContext);
 
+  // Obtención del entorno (dev o pro) cuando el componente se monta
   useEffect(() => {
       fetch(Global.url + 'environment')
         .then(response => response.json())

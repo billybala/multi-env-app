@@ -13,7 +13,7 @@ const ListCache = () => {
     return (
         moviesCache?.map(movie => {
             return (
-                <Paper key={movie?._id} elevation={3} sx={{ p: 2, flex: 1, maxWidth: 400, width: '100%', backgroundColor: '#333', color: 'white' }}>
+                <Paper key={movie?._id} elevation={3} sx={{ p: 2, flex: '1 1 30%', maxWidth: '30%', backgroundColor: '#333', color: 'white', boxSizing: 'border-box' }}>
                     <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', alignContent: 'center' }}>
                         <Stack direction="column" textAlign="center" paddingBottom={2}>
                             <Typography variant="h5">{movie?.title}</Typography>

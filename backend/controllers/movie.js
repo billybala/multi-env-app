@@ -20,7 +20,7 @@ const create = (req, res) => {
     // Crear objeto a guardar
     const movie = new Movie(params);
 
-    // Guardar el artículo en la base de datos
+    // Guardar la película en la base de datos
     movie.save().then((savedMovie) => {
         if (!savedMovie) {
             return res.status(400).json({
@@ -45,14 +45,16 @@ const create = (req, res) => {
 };
 
 // Método para obtener todas las películas
-const getAll =(req, res) => {
+const getAll = (req, res) => {
+    // Obtención de todas las películas de la base de datos
     let consulta = Movie.find({});
 
+    // Ordenar las películas por fecha de creación
     consulta.sort({date: -1}).exec().then((movies) => {
         if (!movies) {
             return res.status(404).json({
                 status: "error",
-                message: "No se han encontrado artículos !!"
+                message: "No se han encontrado películas !!"
             });
         };
 
@@ -72,8 +74,10 @@ const getAll =(req, res) => {
 
 // Método para eliminar una película
 const deleteOne = (req, res) => {
+    // Obtención del id de la película a eliminar
     let movie_id = req.params.id;
 
+    // Búsqueda de la película a eliminar y posterior eliminación
     Movie.findOneAndDelete({_id: movie_id}).then((deletedMovie) => {
         if (!deletedMovie) {
             return res.status(500).json({
@@ -96,51 +100,8 @@ const deleteOne = (req, res) => {
     });
 };
 
-// Método para editar una película
-const edit = (req, res) => {
-    // Recoger id articulo a editar
-    let edit_id= req.params.id;
-
-    // Recoger datos del body
-    let params = req.body;
-    
-    // Validar datos
-    try {
-        validateMovie(params);
-    }
-    catch (error) {
-        return res.status(400).json({
-            status: "error",
-            message: "Faltan datos por enviar"
-        })
-    }
-
-    // Buscar y actualizar artículo
-    Movie.findOneAndUpdate({_id: edit_id}, req.body, {new: true}).then((editedmovie) => {
-        if (!editedmovie) {
-            return res.status(500).json({
-                status: "error",
-                message: "Error al actualizar la película"
-            });
-        }
-
-        // Devolver respuesta
-        return res.status(200).json({
-            status: "Success",
-            movie: editedmovie
-        });
-    })
-    .catch((error) => {
-        return res.status(500).json({
-            status: "error",
-            message: "Ha ocurrido un error"
-        });
-    });
-};
-
 module.exports = {
     create,
     getAll,
-    deleteOne,
-    edit
+    deleteOne
 };

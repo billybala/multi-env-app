@@ -8,14 +8,13 @@ import {
 } from '@mui/material';
 import { MoviesContext } from '../../../../Context/ContextProvider';
 import { Global } from "../../../../helpers/Global";
-import ModifyModal from "./components/ModifyModal";
 
 const ListDB = () => {
     const { moviesDB } = useContext(MoviesContext);
 
-    const deleteMovie = async (movieId) => {
-        console.log(movieId);
-        
+    // Método que elimina una película de la base de datos
+    const deleteMovie = async (movieId) => { 
+        // Petición a la API para eliminar la película con el id especificado de la base de datos
         const request = await fetch(Global.url + "movie/" + movieId, {
             method: "DELETE",
             headers: {
@@ -33,7 +32,7 @@ const ListDB = () => {
     return (
         moviesDB?.map(movie => {
             return (
-                <Paper key={movie?._id} elevation={3} sx={{ p: 2, flex: 1, maxWidth: 400, width: '30%', backgroundColor: '#333', color: 'white' }}>
+                <Paper key={movie?._id} elevation={3} sx={{ p: 2, flex: '1 1 30%', maxWidth: '30%', backgroundColor: '#333', color: 'white', boxSizing: 'border-box' }}>
                     <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', alignContent: 'center' }}>
                         <Stack direction="column" textAlign="center" paddingBottom={2}>
                             <Typography variant="h5">{movie?.title}</Typography>
@@ -47,11 +46,10 @@ const ListDB = () => {
                                 fullWidth
                                 onClick={() => deleteMovie(movie?._id)}
                             >
-                                Delete Movie
+                                Borrar película
                             </Button>
                         </Stack>
                     </Stack>
-                    <ModifyModal movieId={movie._id} title={movie?.title} content={movie?.content} />
                 </Paper>
             )
         })

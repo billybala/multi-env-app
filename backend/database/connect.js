@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const connectDB = async (retries = 5, delay = 5000) => {
-  // Usamos la variable de entorno MONGO_URI que viene del respectivo fichero .env
+  // Se usa la variable de entorno MONGO_URI que viene del respectivo fichero .env
   const mongoURI = process.env.MONGO_URI;
   while (retries > 0) {
     try {
