@@ -17,10 +17,12 @@ const AddModal = () => {
     const [newTitle, setNewTitle] = useState('');
     const [newContent, setNewContent] = useState('');
 
+    // Método que cierra el modal sin guardar nada en la base de datos
     const handleClose = () => {
         setOpenModalAdd(false);
     }
 
+    // Método que agrega una película a la base de datos
     const handleAddMovie = async (e) => {
         e.preventDefault();
 
@@ -30,6 +32,7 @@ const AddModal = () => {
             content: newContent
         };
         
+        // Petición a la API para agregar la película a la base de datos
         const request = await fetch(Global.url + "create", {
             method: "POST",
             body: JSON.stringify(newData),
@@ -41,7 +44,7 @@ const AddModal = () => {
         const data = await request.json();
     
         if (data.status === "Success") {
-            
+            alert("Película agregada con éxito");
         }
 
         setOpenModalAdd(false);
@@ -49,10 +52,10 @@ const AddModal = () => {
 
     return (
         <Dialog open={openModalAdd} onClose={handleClose}>
-            <DialogTitle>Add Movie</DialogTitle>
+            <DialogTitle>Añadir Película</DialogTitle>
             <DialogContent>
                 <DialogContentText>
-                    Please enter the details of the movie you want to add.
+                    Introduce los detalles de la película.
                 </DialogContentText>
                 <TextField
                     autoFocus
@@ -62,7 +65,6 @@ const AddModal = () => {
                     type="text"
                     fullWidth
                     variant="standard"
-                    // value={title}
                     onChange={(e) => setNewTitle(e.target.value)}
                 />
                 <TextField
@@ -74,13 +76,12 @@ const AddModal = () => {
                     variant="standard"
                     multiline
                     rows={4}
-                    // value={content}
                     onChange={(e) => setNewContent(e.target.value)}
                 />
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleClose}>Cancel</Button>
-                <Button onClick={handleAddMovie}>Add</Button>
+                <Button onClick={handleClose}>Cancelar</Button>
+                <Button onClick={handleAddMovie}>Añadir</Button>
             </DialogActions>
         </Dialog>
     )

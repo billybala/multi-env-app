@@ -1,4 +1,4 @@
-# Usa la imagen base de Node.js para construir la aplicación
+# Usa una imagen base de Node.js
 FROM node:18-alpine
 
 # Establece el directorio de trabajo
@@ -13,8 +13,8 @@ RUN npm install
 # Copia el código fuente
 COPY . .
 
-# Exponer el puerto en el que nginx sirve la aplicación
+# Exponer el puerto para el servidor
 EXPOSE 3000
 
-# Comando para iniciar nginx
+# Comando por defecto para ejecutar la aplicación
 CMD ["npm", "start"]

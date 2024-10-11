@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { 
     Container,
     Button, 
@@ -17,9 +17,13 @@ const ButtonsSection = () => {
         setOpenModalAdd,
         environment,
         DBConnectionState,
-        cacheConnectionState
+        cacheConnectionState,
+        setMoviesCache
     } = useContext(MoviesContext);
 
+    const [isEmpty, setIsEmpty] = useState(true);
+
+    // Obtención de las películas de la base de datos cuando carga la página
     useEffect(() => {
         const getMoviesFromDB = async () => {
             const request = await fetch(Global.url + "movies", {
@@ -38,11 +42,14 @@ const ButtonsSection = () => {
         getMoviesFromDB();
     });
 
+    // Método que muestra el modal para añadir una película
     const addMovie = () => {
         setOpenModalAdd(true);
     };
 
+    // Método que muestra todas las películas de la base de datos
     const showAllMovies = async () => {
+        // Petición a la API para obtener todas las películas de la base de datos
         const request = await fetch(Global.url + "movies", {
             method: "GET",
             headers: {
@@ -58,12 +65,39 @@ const ButtonsSection = () => {
         }
     };
 
-    const showMoviesInCache = () => {
+    // Método que guarda las películas en caché
+    const saveInCache = async () => {
+        // Petición a la API para guardar todas las películas de la base de datos en caché
+        const request = await fetch(Global.url + "cache-movies");
+        const cacheStatus = await request.json();
 
+        if (cacheStatus.status === "Success" && !cacheStatus.isEmpty) {
+            setIsEmpty(false);
+        };
+    }
+    
+    // Método que muestra las películas guardadas en caché
+    const showMoviesInCache = async () => {
+        // Petición a la API para obtener las películas guardadas en caché
+        const request = await fetch(Global.url + "get-movies-from-cache");
+        const data = await request.json();
+
+        if (data.status === "Success") {
+            setMoviesCache(data?.movies);
+            setListToShow("cache");
+        }
     };
 
-    const emptyCache = () => {
+    // Método que vacía la caché
+    const emptyCache = async () => {
+        // Petición a la API para vaciar la caché
+        const request = await fetch(Global.url + "clear-cache", { method: 'DELETE' });
 
+        const cacheStatus = await request.json();
+
+        if (cacheStatus.status === "Empty") {
+            setIsEmpty(true);
+        }
     };
 
     return (
@@ -74,33 +108,41 @@ const ButtonsSection = () => {
                             variant="contained" 
                             fullWidth
                             onClick={addMovie}
-                            disabled={DBConnectionState === "Disconnected"}
+                            disabled={DBConnectionState === "Desconectado"}
                         >
-                            Add Movie
+                            Añadir película
                         </Button>
                         <Button 
                             variant="contained" 
                             fullWidth
                             onClick={showAllMovies}
-                            disabled={moviesDB.length === 0 || DBConnectionState === "Disconnected"}
+                            disabled={moviesDB.length === 0 || DBConnectionState === "Desconectado"}
                         >
-                            Show All Movies In Database
+                            Mostrar Películas de la BD
+                        </Button>
+                        <Button 
+                            variant="contained" 
+                            fullWidth
+                            onClick={saveInCache}
+                            disabled={environment !== 'production' || cacheConnectionState === 'Desconectado'}
+                        >
+                            Guardar Películas en Caché
                         </Button>
                         <Button 
                             variant="contained" 
                             fullWidth
                             onClick={showMoviesInCache}
-                            disabled={environment !== 'production' || cacheConnectionState !== 'Disconnected'}
+                            disabled={environment !== 'production' || cacheConnectionState === 'Desconectado' || isEmpty}
                         >
-                            Show Movies In Cache
+                            Mostrar Películas En Caché
                         </Button>
                         <Button 
                             variant="contained" 
                             fullWidth
                             onClick={emptyCache}
-                            disabled={environment !== 'production' || cacheConnectionState !== 'Connected'}
+                            disabled={environment !== 'production' || cacheConnectionState === 'Desconectado' || isEmpty}
                         >
-                            Empty Cache
+                            Vaciar Caché
                         </Button>
                     </Stack>
                     <AddModal />

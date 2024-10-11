@@ -7,16 +7,15 @@ services:
       args: 
         REACT_APP_ENV: ${NODE_ENV}  # Pasa el entorno al Dockerfile
     ports:
-      - "3000:3000"  # En desarrollo, React usa el puerto 3000
-      - "80:80"  # En producción, el puerto de Nginx es 80
+      - "3000:3000"  # React usa el puerto 3000
+    environment:
+      - NODE_ENV=${NODE_ENV}
     depends_on:
       - backend
     networks:
       - app-network
     volumes:
-      - ./frontend:/app  # Solo en desarrollo para hot-reloading
-    command: >
-      sh -c "if [ ${NODE_ENV} = 'development' ]; then npm start; else nginx -g 'daemon off;'; fi"
+      - ./frontend:/app
 
   # Backend (Node.js)
   backend:
@@ -27,7 +26,7 @@ services:
       - "8000:8000"  # Puerto del backend
     environment:
       - NODE_ENV=${NODE_ENV}  # Variable de entorno en función de si es DEV o PRO
-      - MONGO_URI=${MONGO_URI}  # URI de la base de datos
+      - MONGO_URI=${MONGO_URI}  # URI de la base de datos de DEV o PRO
       - REDIS_HOST=${REDIS_HOST}
     depends_on:
       - db
