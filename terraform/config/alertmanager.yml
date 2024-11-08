@@ -6,11 +6,15 @@ global:
 
 route:
   receiver: "email-alert"
+  routes:
+    - match:
+        alertname: "GrafanaAlert"
+      receiver: "grafana-webhook"
 
 receivers:
   - name: "email-alert"
     email_configs:
-      - to: "bielbalaguer01@gmail.com"
-    - name: 'grafana-webhook'
+      - to: "example@email.com"
+  - name: "grafana-webhook"
     webhook_configs:
-      - url: 'http://grafana:3000'
+      - url: "http://grafana:3000"

@@ -243,11 +243,6 @@ resource "docker_container" "prometheus" {
   }
 
   volumes {
-    host_path      = abspath("${path.module}/config/alert.rules.yml")
-    container_path = "/etc/prometheus/alert.rules.yml"
-  }
-
-  volumes {
     container_path = "/prometheus"
     volume_name    = docker_volume.prometheus_data.name
   }
