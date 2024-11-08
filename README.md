@@ -16,12 +16,13 @@ En caso de querer ver visualmente las bases de datos, puedes utilizar [MongoDB C
 
 2. Una vez descargado o clonado el proyecto, abre una terminal en la carpeta del proyecto, sitúate en la carpeta backend (`cd backend`) y ejecuta `npm install` para instalar las dependencias del backend. Haz lo mismo para la carpeta frontend (`cd frontend`) y ejecuta `npm install`.
 
-3. Una vez instaladas las dependencias, dirígete a tu gestor de docker preferido, abre una terminal y ejecuta uno de los siguientes comandos para crear y arrancar el contenedor de la aplicación en función del entorno que desees utilizar:
+3. Una vez instaladas las dependencias, entra en la carpeta `terraform` y crea el fichero `terraform.tfvars` con las variables de entorno correspondientes a tu entorno de desarrollo o producción.
 
-- Para el entorno de desarrollo, ejecuta `docker-compose --env-file .env.dev up --build`.
-- Para el entorno de producción, ejecuta `docker-compose --env-file .env.prod up --build`.
+4. Después de crear este fichero, abre un terminal y, dentro de la carpeta `terraform`, ejecuta primero `terraform init` y luego `terraform apply`.
 
-4. Cuando se haya levantado la aplicación, espera a que el frontend te indique que está listo. Sabrás que está listo cuando te muestre la url `http://localhost:3000`. Ábrela en tu navegador para ver la aplicación.
+5. Cuando se haya levantado la aplicación, ejecuta `docker ps` para ver qué instancias de la aplicación están levantadas. Los contenedores de la aplicación se llaman `web_app_1`, `web_app_2`, etc. Para ver la aplicación en tu navegador, abre la url `http://localhost:port`, donde `port` es el puerto correspondiente a la instancia que quieres ver.
+
+6. En el caso de querer ver la monitorización de la aplicación, puedes acceder a la interfaz de Grafana en la url `http://localhost:3000/grafana`. Desde aquí, puedes ver las métricas de la aplicación y los logs de los contenedores.
 
 ## 2. Partes del proyecto
 
@@ -41,7 +42,7 @@ El backend se encarga de manejar la conexión a la base de datos y la caché, as
 
 - **Controllers**: Esta carpeta contiene los archivos necesarios para definir las funciones de las diferentes APIs. Contiene un archivo llamado `movies.js` que contiene la definición de las funciones de las APIs.
 
-- **Dockerfile**: Este archivo es el archivo de configuración del contenedor de la aplicación. Contiene las instrucciones necesarias para construir el contenedor del backend.
+- **Dockerfile**: Este archivo es el archivo de configuración de la imagen personalizada de la aplicación. Contiene las instrucciones necesarias para construir la imagen del backend.
 
 ### 2.2 Frontend
 
@@ -55,15 +56,21 @@ El frontend se encarga de mostrar la interfaz de usuario de la aplicación y de 
 
 - **Helpers**: Esta carpeta contiene los archivos necesarios para definir las funciones de utilidad del frontend.
 
-- **Dockerfile**: Este archivo es el archivo de configuración del contenedor de la aplicación. Contiene las instrucciones necesarias para construir el contenedor del frontend.
+- **Dockerfile**: Este archivo es el archivo de configuración de la imagen personalizada de la aplicación. Contiene las instrucciones necesarias para construir la imagen del frontend.
 
-### 2.3 Archivos de entorno .env.dev y .env.prod
+### 2.3 terraform
 
-Estos archivos contienen las variables de entorno que se utilizarán en el backend y el frontend. Cada archivo contiene las variables de entorno correspondientes a un entorno diferente, y se utilizan para configurar la conexión a la base de datos y la caché según el entorno que se esté utilizando.
+Este directorio contiene los archivos necesarios para configurar la infraestructura de la aplicación. Contiene los siguientes archivos:
 
-### 2.4 Archivo docker-compose.yml
+- **main.tf**: Este archivo es el punto de entrada principal de Terraform. Contiene la configuración de la aplicación, incluyendo la creación de las redes compartidas, los contenedores de la aplicación, las imágenes personalizadas y los volumenes.
 
-Este archivo contiene la configuración de la aplicación para ejecutarse en diferentes entornos. Contiene las variables de entorno que se utilizarán en el backend y el frontend, así como las configuraciones de la base de datos y la caché según el entorno que se esté utilizando.
+- **config**: Este directorio contiene los archivos necesarios para configurar los servicios de la aplicación.
+
+- **provider.tf**: Este archivo contiene la configuración de los proveedores de servicios de la infraestructura. En este caso, se utiliza Docker para crear y administrar los contenedores de la aplicación y para construir las imágenes personalizadas.
+
+- **variables.tf**: Este archivo define las variables de entorno usadas por Terraform para configurar la infraestructura de la aplicación.
+
+- **terraform.tfvars**: Este archivo contiene las variables de entorno que se utilizarán en el backend y el frontend, así como las configuraciones de la base de datos y la caché según el entorno que se esté utilizando.
 
 ## 4. Tests utilizados y sus output
 
@@ -85,6 +92,10 @@ Este archivo contiene la configuración de la aplicación para ejecutarse en dif
 
 - Test de vaciar caché: La aplicación no se conecta a la caché en este entorno, por lo que no se puede vaciar la caché.
 
+- Test de almacenar un fichero de logs en un almacenamiento compartido: Se crea un fichero de información que contiene la instancia de la aplicación desde la que se crea el fichero, un timestamp y el contenido de la base de datos y se guarda en el almacenamiento compartido.
+
+- Test de descargar el último fichero de logs almacenado en el almacenamiento compartido: Se descarga el último fichero de logs almacenado en el almacenamiento compartido emn formato JSON.
+
 ### 4.2 Entorno de producción:
 
 - Test de conexión a la base de datos: La aplicación se conecta a la base de datos automáticamente y muestra el estado de la conexión en la sección de conexión a la base de datos. Con los botones de conectar y desconectar, se visualiza como cambia el estado de la conexión a la base de datos.
@@ -100,3 +111,7 @@ Este archivo contiene la configuración de la aplicación para ejecutarse en dif
 - Test de mostrar películas en caché: Al pulsar el botón "Mostrar películas en caché", se muestran las películas guardadas en caché.
 
 - Test de vaciar caché: Al pulsar el botón "Vaciar caché", se vacían las películas guardadas en caché.
+
+- Test de almacenar un fichero de logs en un almacenamiento compartido: Se crea un fichero de información que contiene la instancia de la aplicación desde la que se crea el fichero, un timestamp y el contenido de la base de datos y se guarda en el almacenamiento compartido.
+
+- Test de descargar el último fichero de logs almacenado en el almacenamiento compartido: Se descarga el último fichero de logs almacenado en el almacenamiento compartido emn formato JSON.

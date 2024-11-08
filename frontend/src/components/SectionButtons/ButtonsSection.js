@@ -40,7 +40,8 @@ const ButtonsSection = () => {
             }
         };
         getMoviesFromDB();
-    });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     // Método que muestra el modal para añadir una película
     const addMovie = () => {
@@ -102,51 +103,51 @@ const ButtonsSection = () => {
 
     return (
         <Container maxWidth="lg">
-                <Paper elevation={3} sx={{ p: 2, width: '100%', backgroundColor: '#333', color: 'white' }}>
-                    <Stack direction="row" spacing={2}>
-                        <Button 
-                            variant="contained" 
-                            fullWidth
-                            onClick={addMovie}
-                            disabled={DBConnectionState === "Desconectado"}
-                        >
-                            Añadir película
-                        </Button>
-                        <Button 
-                            variant="contained" 
-                            fullWidth
-                            onClick={showAllMovies}
-                            disabled={moviesDB.length === 0 || DBConnectionState === "Desconectado"}
-                        >
-                            Mostrar Películas de la BD
-                        </Button>
-                        <Button 
-                            variant="contained" 
-                            fullWidth
-                            onClick={saveInCache}
-                            disabled={environment !== 'production' || cacheConnectionState === 'Desconectado'}
-                        >
-                            Guardar Películas en Caché
-                        </Button>
-                        <Button 
-                            variant="contained" 
-                            fullWidth
-                            onClick={showMoviesInCache}
-                            disabled={environment !== 'production' || cacheConnectionState === 'Desconectado' || isEmpty}
-                        >
-                            Mostrar Películas En Caché
-                        </Button>
-                        <Button 
-                            variant="contained" 
-                            fullWidth
-                            onClick={emptyCache}
-                            disabled={environment !== 'production' || cacheConnectionState === 'Desconectado' || isEmpty}
-                        >
-                            Vaciar Caché
-                        </Button>
-                    </Stack>
-                    <AddModal />
-                </Paper>
+            <Paper elevation={3} sx={{ p: 2, width: '100%', backgroundColor: '#333', color: 'white' }}>
+                <Stack direction="row" spacing={2}>
+                    <Button 
+                        variant="contained" 
+                        fullWidth
+                        onClick={addMovie}
+                        disabled={DBConnectionState === "Desconectado"}
+                    >
+                        Añadir película
+                    </Button>
+                    <Button 
+                        variant="contained" 
+                        fullWidth
+                        onClick={showAllMovies}
+                        disabled={moviesDB.length === 0 || DBConnectionState === "Desconectado"}
+                    >
+                        Mostrar Películas de la BD
+                    </Button>
+                    <Button 
+                        variant="contained" 
+                        fullWidth
+                        onClick={saveInCache}
+                        disabled={environment !== 'production' || cacheConnectionState === 'Desconectado'}
+                    >
+                        Guardar Películas en Caché
+                    </Button>
+                    <Button 
+                        variant="contained" 
+                        fullWidth
+                        onClick={showMoviesInCache}
+                        disabled={environment !== 'production' || cacheConnectionState === 'Desconectado' || isEmpty}
+                    >
+                        Mostrar Películas En Caché
+                    </Button>
+                    <Button 
+                        variant="contained" 
+                        fullWidth
+                        onClick={emptyCache}
+                        disabled={environment !== 'production' || cacheConnectionState === 'Desconectado' || isEmpty}
+                    >
+                        Vaciar Caché
+                    </Button>
+                </Stack>
+                <AddModal />
+            </Paper>
         </Container>
     );
 };

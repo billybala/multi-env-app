@@ -1,0 +1,16 @@
+global:
+  smtp_smarthost: "smtp.example.com:587"
+  smtp_from: "alertmanager@example.com"
+  smtp_auth_username: "username"
+  smtp_auth_password: "password"
+
+route:
+  receiver: "email-alert"
+
+receivers:
+  - name: "email-alert"
+    email_configs:
+      - to: "bielbalaguer01@gmail.com"
+    - name: 'grafana-webhook'
+    webhook_configs:
+      - url: 'http://grafana:3000'

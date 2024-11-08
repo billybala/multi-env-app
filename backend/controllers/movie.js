@@ -1,5 +1,7 @@
 const { validateMovie } = require("../helpers/validate");
 const Movie = require("../models/Movie.js");
+const path = require("path");
+const fs = require("fs");
 
 // Método para crear una película
 const create = (req, res) => {
@@ -100,8 +102,82 @@ const deleteOne = (req, res) => {
     });
 };
 
+const saveDocument = async (req, res) => {
+    try {
+        // Obtención de los datos a enviar por post
+        const { instanceId } = req.body;
+        const timestamp = new Date().toISOString();
+        const movies = await Movie.find({});
+            
+        // Generación del contenido del documento
+        const content = JSON.stringify({
+            instance: instanceId,
+            timestamp,
+            movies
+        }, null, 2);
+        
+        const filePath = path.join('/app/static', 'db_snapshot.json');
+        
+        // Escritura del contenido del documento en el archivo
+        await fs.promises.writeFile(filePath, content);
+        
+        return res.status(200).json({
+            status: "Success",
+            message: "Documento guardado con éxito",
+            filePath
+        });
+    } catch(error) {
+        return res.status(500).json({
+            status: "error",
+            message: "Ha ocurrido al guardar el documento",
+            error
+        });
+    };
+};
+
+const downloadDocument = (req, res) => {
+    const filePath = path.join('/app/static', 'db_snapshot.json');
+
+    // Verifica si el archivo existe
+    fs.access(filePath, fs.constants.F_OK, (err) => {
+        if (err) {
+            return res.status(404).json({
+                status: "error",
+                message: "El documento no existe"
+            });
+        }
+
+        // Envía el archivo al cliente para descarga
+        res.download(filePath, 'db_snapshot.json', (err) => {
+            if (err) {
+                return res.status(500).json({
+                    status: "error",
+                    message: "Error al descargar el documento"
+                });
+            }
+        });
+    });
+};
+
+const checkDocumentExists = (req, res) => {
+    const filePath = path.join('/app/static', 'db_snapshot.json'); // Ruta del archivo en el almacenamiento compartido
+
+    fs.access(filePath, fs.constants.F_OK, (err) => {
+        if (err) {
+            // El archivo no existe
+            return res.json({ exists: false });
+        } else {
+            // El archivo existe
+            return res.json({ exists: true });
+        }
+    });
+};
+
 module.exports = {
     create,
     getAll,
-    deleteOne
+    deleteOne,
+    saveDocument,
+    downloadDocument,
+    checkDocumentExists,
 };
