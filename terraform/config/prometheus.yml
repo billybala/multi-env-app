@@ -6,9 +6,6 @@ alerting:
     - static_configs:
         - targets: ["alertmanager:9093"] # Agrega la configuración de Alertmanager
 
-rule_files:
-  - "/etc/prometheus/alert.rules" # Archivo de reglas de alerta
-
 scrape_configs:
   - job_name: "prometheus"
     static_configs:

@@ -31,7 +31,7 @@ resource "docker_volume" "static_files" {
 # }
 # }
 
-# Imagen del frontend (React) (se usa data porque la imagen ya está construida pero terraform la intenta reconstruir y se acaba el tiempo)
+# Imagen del frontend (React) (se usa data porque la imagen ya está construida pero terraform la intenta reconstruir y se acaba el tiempo porque es muy grande)
 data "docker_image" "frontend_image" {
   name = "frontend_image"
 }
@@ -72,7 +72,7 @@ resource "docker_container" "web_app" {
   depends_on = [docker_container.backend]
 }
 
-# Backend (Node.js)
+# Imagen del backend (Node.js)
 resource "docker_image" "backend_image" {
   name = "backend_image"
   build {
@@ -109,6 +109,7 @@ resource "docker_container" "backend" {
     container_path = "/app"
   }
 
+  # Monta el volumen compartido para archivos estáticos
   volumes {
     volume_name    = docker_volume.static_files.name
     container_path = "/app/static"
@@ -161,6 +162,7 @@ resource "docker_container" "cache" {
     "ALLOW_EMPTY_PASSWORD=yes"
   ]
 
+  # Configuración para soportar alto tráfico en producción
   cpu_shares = var.NODE_ENV == "production" ? 512 : 256
   memory     = var.NODE_ENV == "production" ? 1024 : 512
 
@@ -221,13 +223,17 @@ resource "docker_container" "nginx_lb" {
   depends_on = [docker_container.web_app]
 }
 
+# Volumen compartido para Prometheus
 resource "docker_volume" "prometheus_data" {
   name = "prometheus_data"
 }
+
+
 resource "docker_image" "prometheus" {
   name = "prom/prometheus:latest"
 }
 
+# Contenedor de Prometheus (usado para monitorizar los contenedores de la aplicación)
 resource "docker_container" "prometheus" {
   image = docker_image.prometheus.name
   name  = "prometheus"
@@ -252,14 +258,17 @@ resource "docker_container" "prometheus" {
   }
 }
 
+# Volumen compartido para Grafana
 resource "docker_volume" "grafana_data" {
   name = "grafana_data"
 }
 
+# Imagen de Grafana
 resource "docker_image" "grafana" {
   name = "grafana/grafana:latest"
 }
 
+# Contenedor de Grafana (usado para visualizar la monitorización de los contenedores de la aplicación y enviar alertas a Alertmanager en caso de que algo vaya mal)
 resource "docker_container" "grafana" {
   image = docker_image.grafana.name
   name  = "grafana"
@@ -286,14 +295,17 @@ resource "docker_container" "grafana" {
   depends_on = [docker_container.prometheus]
 }
 
+# Volumen compartido para Loki
 resource "docker_volume" "loki_data" {
   name = "loki_data"
 }
 
+# Imagen de Loki
 resource "docker_image" "loki" {
   name = "grafana/loki:latest"
 }
 
+# Contenedor de Loki (usado para almacenar los logs de los contenedores de la aplicación y enviarlos a Grafana)
 resource "docker_container" "loki" {
   image = docker_image.loki.name
   name  = "loki"
@@ -313,10 +325,12 @@ resource "docker_container" "loki" {
   }
 }
 
+# Imagen de Promtail
 resource "docker_image" "promtail" {
   name = "grafana/promtail:latest"
 }
 
+# Contenedor de Promtail (usado para recibir logs de los contenedores de la aplicación y almacenarlos en Loki)
 resource "docker_container" "promtail" {
   image = docker_image.promtail.name
   name  = "promtail"
@@ -339,10 +353,12 @@ resource "docker_container" "promtail" {
   depends_on = [docker_container.loki]
 }
 
+# Imagen de Alertmanager
 resource "docker_image" "alertmanager" {
   name = "prom/alertmanager:latest"
 }
 
+# Contenedor de Alertmanager (usado para recibir alertas de Grafana)
 resource "docker_container" "alertmanager" {
   image = docker_image.alertmanager.name
   name  = "alertmanager"
