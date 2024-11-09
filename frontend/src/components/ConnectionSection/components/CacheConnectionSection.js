@@ -35,13 +35,14 @@ const CacheConnectionSection = () => {
       .catch(() => setCacheConnectionState('Desconectado'));
   };
 
-  // Obtener el estado inicial de la cachécuando el componente se monta
+  // Obtener el estado inicial de la caché cuando el componente se monta
   useEffect(() => {
     fetch(Global.url + 'redis-status')
       .then(response => response.json())
       .then(data => setCacheConnectionState(data.redisStatus))
       .catch(() => setCacheConnectionState('Desconectado'));
-  });
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>

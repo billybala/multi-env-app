@@ -16,7 +16,8 @@ const ConnectionSection = () => {
       fetch(Global.url + 'environment')
         .then(response => response.json())
         .then(data => setEnvironment(data.environment))
-  });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
         <Container maxWidth='lg'>

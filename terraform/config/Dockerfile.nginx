@@ -1,0 +1,7 @@
+FROM nginx:latest
+
+# Copia la plantilla de configuración en el contenedor
+COPY config/nginx.conf.template /etc/nginx/nginx.conf.template
+
+# Usa envsubst para sustituir el archivo de configuración
+CMD /bin/sh -c "envsubst '\$UPSTREAM_SERVERS' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"
